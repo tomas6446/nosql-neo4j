@@ -28,7 +28,7 @@ public class CarController
 
         app.MapGet("/api/cars/owners/{vinCode}", async (ICarRepository carRepository, string vinCode) =>
         {
-            var cars = await carRepository.SearchAllOwnersOfCar(vinCode);
+            var cars = await carRepository.SearchAllOwnersOfCarByVinCode(vinCode);
             return Results.Json(cars);
         });
 

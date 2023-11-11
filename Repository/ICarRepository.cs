@@ -8,7 +8,7 @@ public interface ICarRepository
 
     Task<List<Dictionary<string, object>>> SearchAllSameMakeCarOwners(string make);
 
-    Task<List<Dictionary<string, object>>> SearchAllOwnersOfCar(string vinCode);
+    Task<List<Dictionary<string, object>>> SearchAllOwnersOfCarByVinCode(string vinCode);
 
     Task<int> CalculateAverageCarAge();
 }

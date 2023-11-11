@@ -43,7 +43,7 @@ public class CarRepository : ICarRepository
     /// <summary>
     ///     Find all owners of the car, from first to current
     /// </summary>
-    public async Task<List<Dictionary<string, object>>> SearchAllOwnersOfCar(string vinCode)
+    public async Task<List<Dictionary<string, object>>> SearchAllOwnersOfCarByVinCode(string vinCode)
     {
         throw new NotImplementedException();
     }
