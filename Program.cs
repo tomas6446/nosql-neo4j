@@ -12,9 +12,12 @@ builder.Services.AddSingleton(s =>
 
     return GraphDatabase.Driver(uri, AuthTokens.Basic(user, password));
 });
+
 builder.Services.AddSingleton<ICarRepository, CarRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
