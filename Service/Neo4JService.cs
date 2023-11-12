@@ -30,12 +30,10 @@ public class Neo4JService
         {
             var cursor = await tx.RunAsync(query, parameters);
             var records = await cursor.ToListAsync();
-            return records.Select(record =>
+            return records.SelectMany(record =>
                 record.Values.Values
                     .OfType<INode>()
-                    .Single()
-                    .Properties
-                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+                    .Select(node => node.Properties.ToDictionary(kvp => kvp.Key, kvp => kvp.Value))
             ).ToList();
         });
         return result;

@@ -22,7 +22,7 @@ Neo4jdb dotnet example
   dotnet run 
 ```
 
-## Access the container
+## Access the container's cypher-shell
 ```bash
-    sudo docker exec -it nosql-neo4j bash
+    sudo docker exec -it nosql-neo4j cypher-shell -u neo4j -p password
 ```
