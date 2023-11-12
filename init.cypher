@@ -1,16 +1,55 @@
 CREATE
-  (c1:Car {make: 'Audi', model: 'A4', year: 2010, price: 10000, color: 'black', owner: 'Tomas', vin: '1234567890'}),
-  (c2:Car {make: 'BMW', model: 'X5', year: 2015, price: 20000, color: 'white', owner: 'Tomas', vin: '1234567891'}),
-  (c3:Car {make: 'Mercedes', model: 'C', year: 2018, price: 30000, color: 'black', owner: 'John', vin: '1234567892'}),
-  (c4:Car {make: 'Toyota', model: 'Camry', year: 2019, price: 40000, color: 'white', owner: 'Pete', vin: '1234567893'});
+  (l1:Location {id: 1, name: 'Location 1'}),
+  (l2:Location {id: 2, name: 'Location 2'}),
+  (l3:Location {id: 3, name: 'Location 3'}),
+  (l4:Location {id: 4, name: 'Location 4'}),
+  (l5:Location {id: 5, name: 'Location 5'}),
+  (l1)-[:ROAD {distance: 10}]->(l2),
+  (l2)-[:ROAD {distance: 20}]->(l3),
+  (l1)-[:ROAD {distance: 20}]->(l3),
+  (l1)-[:ROAD {distance: 30}]->(l4),
+  (l2)-[:ROAD {distance: 30}]->(l4),
+  (l3)-[:ROAD {distance: 30}]->(l4),
+  (l4)-[:ROAD {distance: 40}]->(l5),
+
+  (l2)-[:ROAD {distance: 10}]->(l1),
+  (l3)-[:ROAD {distance: 20}]->(l2),
+  (l4)-[:ROAD {distance: 30}]->(l3),
+  (l5)-[:ROAD {distance: 40}]->(l4);
 
 CREATE
-  (o1:Owner {name: 'Tomas', age: 30, phone_number: '1234567890'}),
-  (o2:Owner {name: 'John', age: 40, phone_number: '1234567891'}),
-  (o3:Owner {name: 'Pete', age: 50, phone_number: '1234567892'});
+  (cu1:Customer {id: 1, name: 'Customer 1'})-[:HAS_LOCATION]->(l1),
+  (cu2:Customer {id: 2, name: 'Customer 2'})-[:HAS_LOCATION]->(l2),
+  (cu3:Customer {id: 3, name: 'Customer 3'})-[:HAS_LOCATION]->(l3),
+  (cu4:Customer {id: 4, name: 'Customer 4'})-[:HAS_LOCATION]->(l4),
+  (cu5:Customer {id: 5, name: 'Customer 5'})-[:HAS_LOCATION]->(l5);
 
 CREATE
-  (m1:Manufacturer {make: 'Audi', country: 'Germany', founded: 1909}),
-  (m2:Manufacturer {make: 'BMW', country: 'Germany', founded: 1916}),
-  (m3:Manufacturer {make: 'Mercedes', country: 'Germany', founded: 1926}),
-  (m4:Manufacturer {make: 'Toyota', country: 'Japan', founded: 1937});
+  (c1:Courier {id: 1, name: 'Courier 1'}),
+  (c2:Courier {id: 2, name: 'Courier 2'}),
+  (c3:Courier {id: 3, name: 'Courier 3'});
+
+CREATE
+  (o1:Order {id: 1, name: 'Order 1'})-[:HAS_LOCATION]->(l1),
+  (o2:Order {id: 2, name: 'Order 2'})-[:HAS_LOCATION]->(l1),
+  (o3:Order {id: 3, name: 'Order 3'})-[:HAS_LOCATION]->(l1),
+  (o4:Order {id: 4, name: 'Order 4'})-[:HAS_LOCATION]->(l2),
+  (o5:Order {id: 5, name: 'Order 5'})-[:HAS_LOCATION]->(l3),
+  (o6:Order {id: 6, name: 'Order 6'})-[:HAS_LOCATION]->(l4),
+  (o7:Order {id: 7, name: 'Order 7'})-[:HAS_LOCATION]->(l5),
+
+  (cu1)-[:ORDERED]->(o1),
+  (cu1)-[:ORDERED]->(o2),
+  (cu1)-[:ORDERED]->(o3),
+  (cu2)-[:ORDERED]->(o4),
+  (cu3)-[:ORDERED]->(o5),
+  (cu3)-[:ORDERED]->(o6),
+  (cu4)-[:ORDERED]->(o7),
+
+  (c1)-[:ASSIGNED_TO_DELIVER]->(o1),
+  (c1)-[:ASSIGNED_TO_DELIVER]->(o2),
+  (c1)-[:ASSIGNED_TO_DELIVER]->(o3),
+  (c2)-[:ASSIGNED_TO_DELIVER]->(o4),
+  (c3)-[:ASSIGNED_TO_DELIVER]->(o5),
+  (c3)-[:ASSIGNED_TO_DELIVER]->(o6),
+  (c3)-[:ASSIGNED_TO_DELIVER]->(o7);

@@ -10,10 +10,19 @@ Neo4jdb dotnet example
 
   # Create docker container
   sudo docker compose up -d
+  
+  # Copy and run the script into container
+  sudo docker cp init.cypher nosql-neo4j:/init.cypher
+  sudo docker exec nosql-neo4j cypher-shell -u neo4j -p password -f /init.cypher
 
   # Build the project
   dotnet build
 
   # Run the project
   dotnet run 
+```
+
+## Access the container
+```bash
+    sudo docker exec -it nosql-neo4j bash
 ```

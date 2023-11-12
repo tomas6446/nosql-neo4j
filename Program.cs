@@ -1,6 +1,7 @@
 using Neo4j.Driver;
 using nosql_neo4j.Controllers;
 using nosql_neo4j.Repository;
+using nosql_neo4j.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,8 @@ builder.Services.AddSingleton(s =>
     return GraphDatabase.Driver(uri, AuthTokens.Basic(user, password));
 });
 
-builder.Services.AddSingleton<ICarRepository, CarRepository>();
+builder.Services.AddSingleton<IDeliveryRepository, DeliveryRepository>();
+builder.Services.AddSingleton<Neo4JService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
@@ -31,6 +33,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-CarController.MapCarsApi(app.MapGroup("/api"));
+DeliveryController.MapDeliveryApi(app.MapGroup("/api/delivery"));
 
 app.Run();
