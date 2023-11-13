@@ -15,44 +15,44 @@ public class DeliveryRepository : IDeliveryRepository
     /// <summary>
     ///     Retrieves a specific order
     /// </summary>
-    public async Task<Dictionary<string, object>> FindOrderById(int orderId)
+    public async Task<string> FindOrderById(int orderId)
     {
-        var query = "MATCH (o:Order {id: $id}) RETURN o";
+        var query = "MATCH (o:Order {id: $id}) RETURN o LIMIT 1";
         var parameters = new { id = orderId };
-        return await _neo4JService.ExecuteReadQueryAsync(query, parameters);
+        return await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
     }
 
     /// <summary>
     ///     Lists all orders that are associated with a particular customer
     /// </summary>
-    public async Task<List<Dictionary<string, object>>> ListOrdersForCustomer(int customerId)
+    public async Task<string> ListOrdersForCustomer(int customerId)
     {
         var query = @"
             MATCH (cu:Customer {id: $id})-[:ORDERED]->(o:Order)
-            RETURN o
+            RETURN cu.id, cu.name
         ";
         var parameters = new { id = customerId };
-        return await _neo4JService.ListExecuteReadQueryAsync(query, parameters);
+        return await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
     }
 
     /// <summary>
     ///    Lists customers connected through ordering from the same location
     /// </summary>
-    public async Task<List<Dictionary<string, object>>> FindConnectedCustomersThroughOrders(int locationId)
+    public async Task<string> FindConnectedCustomersThroughOrders(int locationId)
     {
         var query = @"
             MATCH (c1:Customer)-[:ORDERED]->(o1:Order)-[:HAS_LOCATION]->(l:Location)<-[:HAS_LOCATION]-(o2:Order)<-[:ORDERED]-(c2:Customer)
             WHERE c1 <> c2 AND l.id = $id
-            RETURN l.name AS Location, collect(DISTINCT c1.name) AS Customer1, collect(DISTINCT c2.name) AS Customer2
+            RETURN l.name, collect(DISTINCT c1.name) AS Customer1, collect(DISTINCT c2.name) AS Customer2
         ";
         var parameters = new { id = locationId };
-        return await _neo4JService.ListExecuteReadQueryAsync(query, parameters);
+        return await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
     }
 
     /// <summary>
     ///    Find the Shortest Path Considering Weights
     /// </summary>
-    public async Task<List<Dictionary<string, object>>> CalculateOptimalDeliveryRoute(int orderId)
+    public async Task<string> CalculateOptimalDeliveryRoute(int orderId)
     {
         var query = @"
             MATCH (o:Order {id: $id})-[:HAS_LOCATION]->(start:Location),
@@ -73,14 +73,14 @@ public class DeliveryRepository : IDeliveryRepository
                    }) AS Path
         ";
         var parameters = new { id = orderId };
-        var result = await _neo4JService.ListExecuteReadQueryAsync(query, parameters);
+        var result = await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
         return result;
     }
 
     /// <summary>
     ///     Aggregates the total distance that a courier would travel to deliver all assigned orders
     /// </summary>
-    public async Task<int> SummarizeTotalDistanceForCourier()
+    public async Task<string> SummarizeTotalDistanceForCourier()
     {
         throw new NotImplementedException();
     }

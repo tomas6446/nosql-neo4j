@@ -11,31 +11,31 @@ public class DeliveryController
         app.MapGet("/{rentId}", async (IDeliveryRepository repository, int rentId) =>
         {
             var result = await repository.FindOrderById(rentId);
-            return Results.Ok(result);
+            return Results.Content(result, "application/json");
         });
 
         app.MapGet("/customer/{customerId}", async (IDeliveryRepository repository, int customerId) =>
         {
             var result = await repository.ListOrdersForCustomer(customerId);
-            return Results.Ok(result);
+            return Results.Content(result, "application/json");
         });
 
         app.MapGet("/customers/{locationId}", async (IDeliveryRepository repository, int locationId) =>
         {
             var result = await repository.FindConnectedCustomersThroughOrders(locationId);
-            return Results.Ok(result);
+            return Results.Content(result, "application/json");
         });
 
         app.MapGet("/route/{orderId}", async (IDeliveryRepository repository, int orderId) =>
         {
             var result = await repository.CalculateOptimalDeliveryRoute(orderId);
-            return Results.Ok(result);
+            return Results.Content(result, "application/json");
         });
 
         app.MapGet("/totalDistance", async (IDeliveryRepository repository) =>
         {
             var result = await repository.SummarizeTotalDistanceForCourier();
-            return Results.Ok(result);
+            return Results.Content(result, "application/json");
         });
     }
 }
