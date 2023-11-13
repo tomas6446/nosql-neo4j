@@ -20,11 +20,12 @@ public class DeliveryController
             return Results.Content(result, "application/json");
         });
 
-        app.MapGet("/customers/{locationId}", async (IDeliveryRepository repository, int locationId) =>
-        {
-            var result = await repository.FindConnectedCustomersThroughOrders(locationId);
-            return Results.Content(result, "application/json");
-        });
+        app.MapGet("/routes/{startLocationId}/{endLocationId}",
+            async (IDeliveryRepository repository, int startLocationId, int endLocationId) =>
+            {
+                var result = await repository.FindAllPathsFromLocations(startLocationId, endLocationId);
+                return Results.Content(result, "application/json");
+            });
 
         app.MapGet("/route/{orderId}", async (IDeliveryRepository repository, int orderId) =>
         {
@@ -32,9 +33,9 @@ public class DeliveryController
             return Results.Content(result, "application/json");
         });
 
-        app.MapGet("/totalDistance", async (IDeliveryRepository repository) =>
+        app.MapGet("/courier/orderCount/{couriedId}", async (IDeliveryRepository repository, int couriedId) =>
         {
-            var result = await repository.SummarizeTotalDistanceForCourier();
+            var result = await repository.CalculateOrderCountForCourier(couriedId);
             return Results.Content(result, "application/json");
         });
     }

@@ -29,7 +29,6 @@ public class Neo4JService
                     var value = record[key];
                     recordDict.Add(key, value);
                 }
-
                 resultList.Add(recordDict);
             }
         });

@@ -6,9 +6,9 @@ public interface IDeliveryRepository
 
     Task<string> ListOrdersForCustomer(int customerId);
 
-    Task<string> FindConnectedCustomersThroughOrders(int locationId);
+    Task<string> FindAllPathsFromLocations(int startLocationId, int endLocationId);
 
     Task<string> CalculateOptimalDeliveryRoute(int orderId);
 
-    Task<string> SummarizeTotalDistanceForCourier();
+    Task<string> CalculateOrderCountForCourier(int courierId);
 }
