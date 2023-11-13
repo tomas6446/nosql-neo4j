@@ -1,4 +1,3 @@
-using Neo4j.Driver;
 using nosql_neo4j.Service;
 
 namespace nosql_neo4j.Repository;
@@ -29,14 +28,14 @@ public class DeliveryRepository : IDeliveryRepository
     {
         var query = @"
             MATCH (cu:Customer {id: $id})-[:ORDERED]->(o:Order)
-            RETURN cu.id, cu.name
+            RETURN o.id, o.name, cu.name
         ";
         var parameters = new { id = customerId };
         return await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
     }
 
     /// <summary>
-    ///    Lists all paths from your location to all other locations
+    ///     Lists all paths from your location to all other locations
     /// </summary>
     public async Task<string> FindAllPathsFromLocations(int startLocationId, int endLocationId)
     {
@@ -51,7 +50,7 @@ public class DeliveryRepository : IDeliveryRepository
     }
 
     /// <summary>
-    ///    Find the Shortest Path Considering Weights
+    ///     Find the Shortest Path Considering Weights
     /// </summary>
     public async Task<string> CalculateOptimalDeliveryRoute(int orderId)
     {
