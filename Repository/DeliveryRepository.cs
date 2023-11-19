@@ -50,9 +50,9 @@ public class DeliveryRepository : IDeliveryRepository
     }
 
     /// <summary>
-    ///     Find the Shortest Path Considering Weights
+    ///     Find the Shortest Path Warshall
     /// </summary>
-    public async Task<string> CalculateOptimalDeliveryRoute(int orderId)
+    public async Task<string> CalculateOptimalDeliveryRouteWarshall(int orderId)
     {
         var query = @"
             MATCH (c:Customer)-[:ORDERED]->(o:Order)-[:HAS_LOCATION]->(start:Location), 
@@ -69,6 +69,25 @@ public class DeliveryRepository : IDeliveryRepository
         var result = await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
         return result;
     }
+    
+    /// <summary>
+    ///     Find the Shortest Path Dijkstra
+    /// </summary>
+    public async Task<string> CalculateOptimalDeliveryRouteDijkstra(int orderId)
+    {
+        var query = @"
+            MATCH (c:Customer)-[:ORDERED]->(o:Order)-[:HAS_LOCATION]->(start:Location), 
+                  (c)-[:HAS_LOCATION]->(end:Location)
+            WHERE o.id = $id
+            CALL apoc.algo.dijkstra(start, end, 'ROAD', 'distance') 
+            YIELD path, weight
+            RETURN [node in nodes(path) | node {.name, .id}] AS locations, weight AS totalDistance
+        ";
+        var parameters = new { id = orderId };
+        var result = await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
+        return result;
+    }
+
 
     /// <summary>
     ///     Aggregates the total count of orders for a specific courier

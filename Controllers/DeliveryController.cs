@@ -27,9 +27,15 @@ public class DeliveryController
                 return Results.Content(result, "application/json");
             });
 
-        app.MapGet("/route/{orderId}", async (IDeliveryRepository repository, int orderId) =>
+        app.MapGet("/warshall/route/{orderId}", async (IDeliveryRepository repository, int orderId) =>
         {
-            var result = await repository.CalculateOptimalDeliveryRoute(orderId);
+            var result = await repository.CalculateOptimalDeliveryRouteWarshall(orderId);
+            return Results.Content(result, "application/json");
+        });
+        
+        app.MapGet("/dijkstra/route/{orderId}", async (IDeliveryRepository repository, int orderId) =>
+        {
+            var result = await repository.CalculateOptimalDeliveryRouteDijkstra(orderId);
             return Results.Content(result, "application/json");
         });
 

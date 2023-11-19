@@ -8,7 +8,9 @@ public interface IDeliveryRepository
 
     Task<string> FindAllPathsFromLocations(int startLocationId, int endLocationId);
 
-    Task<string> CalculateOptimalDeliveryRoute(int orderId);
+    Task<string> CalculateOptimalDeliveryRouteWarshall(int orderId);
+
+    Task<string> CalculateOptimalDeliveryRouteDijkstra(int orderId);
 
     Task<string> CalculateOrderCountForCourier(int courierId);
 }
