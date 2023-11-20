@@ -16,7 +16,7 @@ public class DeliveryRepository : IDeliveryRepository
     /// </summary>
     public async Task<string> FindOrderById(int orderId)
     {
-        var query = "MATCH (o:Order {id: $id}) RETURN o LIMIT 1";
+        var query = "MATCH (o:Order {id: $id}) RETURN o.name, o.id LIMIT 1";
         var parameters = new { id = orderId };
         return await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
     }
@@ -69,7 +69,7 @@ public class DeliveryRepository : IDeliveryRepository
         var result = await _neo4JService.ExecuteGenericReadQueryAsync(query, parameters);
         return result;
     }
-    
+
     /// <summary>
     ///     Find the Shortest Path Dijkstra
     /// </summary>
