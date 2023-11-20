@@ -92,7 +92,6 @@ public class DeliveryRepository : IDeliveryRepository
     /// <summary>
     ///     Aggregates the total count of orders for a specific courier
     /// </summary>
-    /// <param name="courierId"></param>
     public async Task<string> CalculateOrderCountForCourier(int courierId)
     {
         var query = @"
